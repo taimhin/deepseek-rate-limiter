@@ -1,0 +1,12 @@
+services:
+  deepseek-limiter:
+    build: .
+    container_name: deepseek-limiter
+    ports:
+      - "8787:8787"
+    env_file:
+      - .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: "8787"
+    restart: unless-stopped

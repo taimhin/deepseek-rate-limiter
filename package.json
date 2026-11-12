@@ -1,0 +1,51 @@
+{
+  "name": "deepseek-rate-limiter",
+  "version": "1.0.0",
+  "description": "DeepSeek API rate limiter and HTTP proxy: RPM, TPM, concurrency, daily quota, queueing and automatic 429 retry with backoff.",
+  "keywords": [
+    "deepseek",
+    "rate-limiter",
+    "token-bucket",
+    "proxy",
+    "openai-compatible",
+    "llm"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "bin": {
+    "deepseek-limiter-proxy": "./dist/server/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.3"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/server/cli.js",
+    "dev": "tsx watch src/server/cli.ts",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
