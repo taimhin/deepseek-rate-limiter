@@ -120,18 +120,20 @@ export async function sendWithRetry(
     const retryable =
       retryStatuses.includes(response.status) || response.status >= 500;
 
-    if (!retryable || attempt >= maxRetries) {
-      return { response, lease, attempts: attempt + 1 };
-    }
-
     const retryAfter = parseRetryAfter(response.headers.get("retry-after"));
     const delay =
       retryAfter ?? backoffDelay(attempt, baseDelayMs, maxDelayMs, jitterRatio, context.random);
 
-    context.limiter.recordRetry(response.status);
+    // Even when retries are exhausted, a 429 should pause new admissions.
     if (response.status === 429) {
       context.limiter.cooldown(delay);
     }
+
+    if (!retryable || attempt >= maxRetries) {
+      return { response, lease, attempts: attempt + 1 };
+    }
+
+    context.limiter.recordRetry(response.status);
 
     // Drain the failed body so the socket can be reused.
     try {
